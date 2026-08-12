@@ -5,7 +5,7 @@ jobs:
 test:
 	defaults:
 	   run:
-	      working-directory: ../tests
+	      working-directory: ./tests
 	environment: staging
 	name: 'Run tests'
 	runs-on: ubuntu-latest
@@ -19,4 +19,4 @@ test:
 	     run: 'npm install -g newman'
 
 	   - name: 'Run tests'
-	     run: 'newman run BoredApiNewman.postman_collection.json'
+	     run: 'newman run tests/BoredApiNewman.postman_collection.json'
