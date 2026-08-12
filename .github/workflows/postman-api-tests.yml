@@ -27,4 +27,3 @@ jobs:
 
       - name: Run API tests
         run: newman run tests/BoredApi.postman_collection.json
-```
