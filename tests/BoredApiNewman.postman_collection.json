@@ -1,0 +1,261 @@
+{
+  "info": {
+    "_postman_id": "59a7f3ce-9eb1-4e78-942d-426d7823b475",
+    "name": "Bored-api demo script",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "36498077"
+  },
+  "item": [
+    {
+      "name": "GET random data",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"TC001 - response code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"TC002 - Kidfriendly are exist\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.kidFriendly).to.eql(true);\r",
+              "})\r",
+              "\r",
+              "pm.test(\"TC003 - Type of activity must be valid\", () => {\r",
+              "    const validType = [\r",
+              "        \"education\",\r",
+              "        \"recreational\",\r",
+              "        \"social\",\r",
+              "        \"charity\",\r",
+              "        \"cooking\",\r",
+              "        \"relaxation\",\r",
+              "        \"busywork\"\r",
+              "    ]\r",
+              "    pm.expect(validType).to.include(pm.response.json().type);\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "javascript"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/random",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "random"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET data by Filter",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const validType = [\r",
+              "        \"education\",\r",
+              "        \"recreational\",\r",
+              "        \"social\",\r",
+              "        \"charity\",\r",
+              "        \"cooking\",\r",
+              "        \"relaxation\",\r",
+              "        \"busywork\"\r",
+              "    ]\r",
+              "// const randomType = validType[4];\r",
+              "const randomType = validType[Math.floor(Math.random() * validType.length)];\r",
+              "\r",
+              "pm.environment.set(\"type\", randomType);\r",
+              "\r",
+              "pm.environment.get(\"base_url\")\r",
+              "pm.environment.get(\"type\")"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/filter?type={{type}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "filter"
+          ],
+          "query": [
+            {
+              "key": "type",
+              "value": "{{type}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Data by type education",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"the education are kidfriendly\", function () {\r",
+              "    const jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData[0].kidFriendly).to.eql(true);\r",
+              "})\r",
+              "\r",
+              "pm.test(\"All type include education\", function () {\r",
+              "    const validType = \"education\";\r",
+              "    const data = pm.response.json();\r",
+              "    const types = data.every(item => item.type == validType);\r",
+              "\r",
+              "    pm.expect(types).to.be.true;\r",
+              "})\r",
+              "    // pm.expect(validType).to.include(pm.response.json()[0].type);\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.environment.set(\"theType\", \"education\");\r",
+              "pm.environment.get(\"base_url\")\r",
+              "pm.environment.get(\"theType\")"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/filter?type={{theType}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "filter"
+          ],
+          "query": [
+            {
+              "key": "type",
+              "value": "{{theType}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Activity by Key",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is less than 200ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.environment.get(\"base_url\")"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/activity/2095681",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "activity",
+            "2095681"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
