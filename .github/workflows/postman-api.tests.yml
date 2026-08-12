@@ -19,4 +19,4 @@ test:
 	     run: 'npm install -g newman'
 
 	   - name: 'Run tests'
-	     run: 'newman run Regres.io.postman_collection.json'
+	     run: 'newman run BoredApiNewman.postman_collection.json'
